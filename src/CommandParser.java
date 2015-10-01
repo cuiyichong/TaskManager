@@ -1,6 +1,7 @@
 
 public class CommandParser {
-		
+	
+	private static String[] KEYWORD = {"add", "update", "delete", "redo", "at", "by", "from", "to"};
 	public CommandParser() {
 	}
 	
@@ -15,11 +16,51 @@ public class CommandParser {
 	
 	private String initEvent(String[] array) {
 		String event = new String();
-		return event;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 1; i < array.length; i++) {
+			if(isAppendable(array, i)) {
+				sb.append(" ");
+				sb.append(array[i]);
+			}
+		}
+ 		return event;
 	}
 	
 	private String initTimeConstraint(String[] array) {
 		String timeConstraint = new String();
 		return timeConstraint;
+	}
+	
+	private boolean isTimeFormat(String str) { 
+		if (str.contains("/") || str.contains(":")) { 
+			return true;
+		}
+		else 
+			return false;
+		
+	}
+	
+	private boolean isKeyword(String str) {
+		for(int i=0; i<KEYWORD.length; i++) {
+			if(str.equals(KEYWORD[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isAppendable(String[] arr, int i) {
+		if(isKeyword(arr[i])==false && isTimeFormat(arr[i])==false) {
+			return true;
+		}
+		if(isKeyword(arr[i])==true) {
+			if(isTimeFormat(arr[i+1]) && (i+1)<arr.length) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		return false;
 	}
 }
